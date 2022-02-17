@@ -1,55 +1,4 @@
-// Source of graph database
-
-const testSchema = {
-  User: {
-    name: String,
-    age: Number,
-    // Define schema and resolver at once.
-    // Array schema can be defined as array
-    transactions: ["Transaction", (obj, collection) => collection.filter((item) => item.user == obj.name)],
-    address: String,
-  },
-
-  Transaction: {
-    // And object schema can be defined as object.
-    user: { User: (obj, collection) => collection.filter((item) => item.name === obj.user)[0] },
-    price: Number,
-  },
-
-  // Root entrypoint.
-  Query: { users: ["User", (_, collection) => collection] },
-};
-
-const testDB = {
-  User: [
-    { name: "a", age: 20, address: "here" },
-    { name: "b", age: 30, address: "there" },
-    { name: "c", age: 40, address: "somewhere" },
-  ],
-  Transaction: [
-    { user: "a", price: 10 },
-    { user: "b", price: 20 },
-    { user: "b", price: 21 },
-    { user: "b", price: 22 },
-    { user: "c", price: 30 },
-    { user: "c", price: 15 },
-  ],
-};
-
-const testQuery = {
-  Query: {
-    users: {
-      name: () => true,
-      transactions: {
-        price: (price) => price === 20,
-        user: {
-          name: () => true,
-          address: () => true,
-        },
-      },
-    },
-  },
-};
+// Source code of graph database
 
 class GraphDatabase {
   constructor(schema, database = {}) {
@@ -115,8 +64,4 @@ class GraphDatabase {
   }
 }
 
-const myDB = new GraphDatabase(testSchema, testDB);
-
-const result = myDB.fetch(testQuery);
-
-console.dir(result, { depth: null });
+module.exports = GraphDatabase;
