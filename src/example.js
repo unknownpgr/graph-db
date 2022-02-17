@@ -39,8 +39,9 @@ const testDB = {
   ],
 };
 
+const myDB = new GraphDatabase(testSchema, testDB);
+
 // For query without condition, use true-constant function.
-const all = () => true;
 
 /**
  * Get all users
@@ -49,6 +50,7 @@ const all = () => true;
  *    with the user of the transaction
  *      whose address ends with 'where'
  */
+const all = () => true;
 const testQuery = {
   // Root item of query must be either Query or Mutation.
   Query: {
@@ -68,6 +70,27 @@ const testQuery = {
   },
 };
 
-const myDB = new GraphDatabase(testSchema, testDB);
 const result = myDB.fetch(testQuery);
 console.dir(result, { depth: null });
+
+/*
+// result
+{
+  Query: {
+    users: [
+      { name: 'a', transactions: [] },
+      {
+        name: 'b',
+        transactions: [
+          { price: 21, user: undefined },
+          { price: 22, user: undefined }
+        ]
+      },
+      {
+        name: 'c',
+        transactions: [ { price: 30, user: { name: 'c', address: 'somewhere' } } ]
+      }
+    ]
+  }
+}
+*/
